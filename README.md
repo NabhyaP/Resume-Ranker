@@ -83,10 +83,7 @@ Resume_Ranker/
 4. **Skill Matching**: Uses fuzzy matching and keyword extraction to compare listed skills.
 5. **Weighted Scoring**:
    - **Skills**: 40% (Default)
-   - **Experience**: 40% (Default)
-   - **Education**: 20% (Default)
+   - **Experience**: 30% (Default)
+   - **Education**: 15% (Default)
+   - **Overall**: 15% (Default)
    - *Weights can be adjusted in `src/config.py`.*
-
-## 📝 License
-
-This project is licensed under the MIT License.
