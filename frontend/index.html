@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Resume Ranker – AI-powered resume-to-job-description matching and bulk ranking tool.">
+    <title>Resume Ranker – AI Match Scorer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <header>
+        <div class="logo">
+            <span class="logo-icon">⚡</span>
+            <h1>Resume<span class="accent">Ranker</span></h1>
+        </div>
+        <p class="tagline">AI-Powered Resume Matching</p>
+    </header>
+
+    <main>
+        <!-- Mode Tabs -->
+        <div class="mode-tabs">
+            <button class="mode-tab active" id="tab-single" data-mode="single">
+                <span>📄</span> Single Resume
+            </button>
+            <button class="mode-tab" id="tab-bulk" data-mode="bulk">
+                <span>📚</span> Bulk Ranking
+            </button>
+        </div>
+
+        <!-- ══════════════ SINGLE MODE ══════════════ -->
+        <div id="mode-single">
+            <section class="input-section">
+                <div class="input-panel glass" id="jd-panel">
+                    <div class="panel-header">
+                        <span class="panel-icon">📋</span>
+                        <h2>Job Description</h2>
+                    </div>
+                    <div class="upload-zone" id="jd-drop" data-target="jd">
+                        <input type="file" id="jd-file" accept=".pdf,.docx,.doc,.txt" hidden>
+                        <span class="upload-icon">📁</span>
+                        <span class="upload-label">Drop a file or <button type="button" class="upload-browse"
+                                onclick="document.getElementById('jd-file').click()">browse</button></span>
+                        <span class="upload-hint">PDF, DOCX, or TXT</span>
+                        <span class="upload-filename" id="jd-filename" hidden></span>
+                    </div>
+                </div>
+
+                <div class="input-panel glass" id="resume-panel">
+                    <div class="panel-header">
+                        <span class="panel-icon">📄</span>
+                        <h2>Resume</h2>
+                    </div>
+                    <div class="upload-zone" id="resume-drop" data-target="resume">
+                        <input type="file" id="resume-file" accept=".pdf,.docx,.doc,.txt" hidden>
+                        <span class="upload-icon">📁</span>
+                        <span class="upload-label">Drop a file or <button type="button" class="upload-browse"
+                                onclick="document.getElementById('resume-file').click()">browse</button></span>
+                        <span class="upload-hint">PDF, DOCX, or TXT</span>
+                        <span class="upload-filename" id="resume-filename" hidden></span>
+                    </div>
+                </div>
+            </section>
+
+            <button id="rank-btn" class="rank-btn">
+                <span class="btn-text">Rank Resume</span>
+                <span class="btn-loader" hidden>
+                    <span class="spinner"></span> Analyzing…
+                </span>
+            </button>
+
+            <section id="results" class="results-section" hidden>
+                <div class="score-hero glass">
+                    <h3>Overall Match</h3>
+                    <div class="score-ring-container">
+                        <svg class="score-ring" viewBox="0 0 120 120">
+                            <circle class="ring-bg" cx="60" cy="60" r="52" />
+                            <circle class="ring-fg" cx="60" cy="60" r="52" id="score-ring-fg" />
+                        </svg>
+                        <span class="score-value" id="final-score">0</span>
+                    </div>
+                </div>
+
+                <div class="breakdown-grid">
+                    <div class="score-card glass" id="card-skills">
+                        <div class="card-icon">🎯</div>
+                        <h4>Skills</h4>
+                        <span class="card-score" data-key="skills">0%</span>
+                        <div class="card-bar">
+                            <div class="card-bar-fill" data-key="skills"></div>
+                        </div>
+                    </div>
+                    <div class="score-card glass" id="card-experience">
+                        <div class="card-icon">💼</div>
+                        <h4>Experience</h4>
+                        <span class="card-score" data-key="experience">0%</span>
+                        <div class="card-bar">
+                            <div class="card-bar-fill" data-key="experience"></div>
+                        </div>
+                    </div>
+                    <div class="score-card glass" id="card-education">
+                        <div class="card-icon">🎓</div>
+                        <h4>Education</h4>
+                        <span class="card-score" data-key="education">0%</span>
+                        <div class="card-bar">
+                            <div class="card-bar-fill" data-key="education"></div>
+                        </div>
+                    </div>
+                    <div class="score-card glass" id="card-overall">
+                        <div class="card-icon">📊</div>
+                        <h4>Semantic</h4>
+                        <span class="card-score" data-key="overall">0%</span>
+                        <div class="card-bar">
+                            <div class="card-bar-fill" data-key="overall"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="skills-detail glass">
+                    <div class="skills-col">
+                        <h4>✅ Matched Skills</h4>
+                        <ul id="matched-skills"></ul>
+                    </div>
+                    <div class="skills-col missing">
+                        <h4>❌ Missing Skills</h4>
+                        <ul id="missing-skills"></ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- ══════════════ BULK MODE ══════════════ -->
+        <div id="mode-bulk" hidden>
+            <section class="input-section">
+                <div class="input-panel glass" id="bulk-jd-panel">
+                    <div class="panel-header">
+                        <span class="panel-icon">📋</span>
+                        <h2>Job Description</h2>
+                    </div>
+                    <div class="upload-zone" id="bulk-jd-drop">
+                        <input type="file" id="bulk-jd-file" accept=".pdf,.docx,.doc,.txt" hidden>
+                        <span class="upload-icon">📁</span>
+                        <span class="upload-label">Drop a file or <button type="button" class="upload-browse"
+                                onclick="document.getElementById('bulk-jd-file').click()">browse</button></span>
+                        <span class="upload-hint">PDF, DOCX, or TXT</span>
+                        <span class="upload-filename" id="bulk-jd-filename" hidden></span>
+                    </div>
+                </div>
+
+                <div class="input-panel glass" id="bulk-resume-panel">
+                    <div class="panel-header">
+                        <span class="panel-icon">📚</span>
+                        <h2>Resumes <span class="badge" id="resume-count-badge" hidden></span></h2>
+                    </div>
+                    <div class="upload-zone" id="bulk-resume-drop">
+                        <input type="file" id="bulk-resume-files" accept=".pdf,.docx,.doc,.txt" multiple hidden>
+                        <span class="upload-icon">📂</span>
+                        <span class="upload-label">Drop files or <button type="button" class="upload-browse"
+                                onclick="document.getElementById('bulk-resume-files').click()">browse</button></span>
+                        <span class="upload-hint">Select multiple PDF, DOCX, or TXT files</span>
+                        <ul class="file-list" id="bulk-file-list"></ul>
+                    </div>
+                </div>
+            </section>
+
+            <button id="bulk-rank-btn" class="rank-btn">
+                <span class="btn-text">🏆 Rank All Resumes</span>
+                <span class="btn-loader" hidden>
+                    <span class="spinner"></span> Analyzing all resumes…
+                </span>
+            </button>
+
+            <!-- Leaderboard -->
+            <section id="bulk-results" class="results-section" hidden>
+                <div class="leaderboard-header glass">
+                    <h3>🏆 Candidate Leaderboard</h3>
+                    <p class="leaderboard-subtitle" id="leaderboard-subtitle"></p>
+                </div>
+                <div id="leaderboard-list"></div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <p>Built with <span class="heart">♥</span> using FastAPI &amp; Sentence Transformers</p>
+    </footer>
+
+    <script src="main.js?v=3"></script>
+</body>
+
+</html>
