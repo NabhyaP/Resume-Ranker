@@ -1,7 +1,6 @@
 import re
 import nltk
 
-# Auto-download required NLTK corpora if not already present
 for _corpus in ("wordnet", "omw-1.4", "punkt", "averaged_perceptron_tagger"):
     try:
         nltk.data.find(f"corpora/{_corpus}" if _corpus not in ("punkt", "averaged_perceptron_tagger") else f"tokenizers/{_corpus}" if _corpus == "punkt" else f"taggers/{_corpus}")

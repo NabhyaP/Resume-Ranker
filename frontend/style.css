@@ -564,7 +564,6 @@ footer {
     }
 }
 
-/* ── Mode Tabs ─────────────────────────────────────────────────── */
 .mode-tabs {
     display: flex;
     justify-content: center;
@@ -600,7 +599,6 @@ footer {
     box-shadow: 0 4px 18px var(--accent-glow);
 }
 
-/* ── Badge ─────────────────────────────────────────────────────── */
 .badge {
     display: inline-flex;
     align-items: center;
@@ -616,7 +614,6 @@ footer {
     margin-left: 0.4rem;
 }
 
-/* ── Bulk File List ─────────────────────────────────────────────── */
 .file-list {
     list-style: none;
     width: 100%;
@@ -663,7 +660,6 @@ footer {
     opacity: 1;
 }
 
-/* ── Leaderboard ────────────────────────────────────────────────── */
 .leaderboard-header {
     text-align: center;
     padding: 1.5rem;

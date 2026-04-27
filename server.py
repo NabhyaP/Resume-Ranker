@@ -70,7 +70,6 @@ async def rank_multiple(
     resume_files: List[UploadFile] = File(...),
     jd_file: UploadFile = File(...)
 ):
-    # Extract JD text once
     jd_raw = await jd_file.read()
     jd_text = extract_text_from_file(jd_file.filename, jd_raw)
 
@@ -80,13 +79,12 @@ async def rank_multiple(
         try:
             resume_text = extract_text_from_file(res_file.filename, raw)
         except ValueError:
-            continue  # Skip unsupported file types silently
+            continue
 
         score_data = match_resume_to_jd(resume_text, jd_text)
         score_data["filename"] = res_file.filename
         results.append(score_data)
 
-    # Sort by final_score descending and assign rank
     results.sort(key=lambda x: x["final_score"], reverse=True)
     for i, r in enumerate(results):
         r["rank"] = i + 1

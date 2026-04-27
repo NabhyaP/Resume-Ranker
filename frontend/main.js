@@ -4,7 +4,6 @@
     const $ = (sel) => document.querySelector(sel);
     const $$ = (sel) => document.querySelectorAll(sel);
 
-    // ── Mode Switching ────────────────────────────────────────────
     const tabs = $$(".mode-tab");
     const modeSingle = $("#mode-single");
     const modeBulk = $("#mode-bulk");
@@ -19,9 +18,6 @@
         });
     });
 
-    // ══════════════════════════════════════════════════════════════
-    //  SINGLE RESUME MODE
-    // ══════════════════════════════════════════════════════════════
     const jdFileInput = $("#jd-file");
     const resumeFileInput = $("#resume-file");
     const jdDrop = $("#jd-drop");
@@ -34,7 +30,6 @@
     let jdFile = null;
     let resumeFile = null;
 
-    // ── SVG Gradient (injected once) ──────────────────────────────
     const svg = $(".score-ring");
     const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
     defs.innerHTML = `
@@ -44,7 +39,6 @@
         </linearGradient>`;
     svg.prepend(defs);
 
-    // ── File Upload Handling ─────────────────────────────────────
     function setupDropZone(dropEl, fileInput, type) {
         ["dragenter", "dragover"].forEach((evt) => {
             dropEl.addEventListener(evt, (e) => {
@@ -101,7 +95,6 @@
     setupDropZone(jdDrop, jdFileInput, "jd");
     setupDropZone(resumeDrop, resumeFileInput, "resume");
 
-    // ── API Call (Single) ─────────────────────────────────────────
     async function rankResume() {
         const formData = new FormData();
         if (resumeFile) formData.append("resume_file", resumeFile);
@@ -118,7 +111,6 @@
         return res.json();
     }
 
-    // ── Animated Counter ─────────────────────────────────────────
     function animateCounter(el, target, suffix = "%", duration = 1000) {
         const start = performance.now();
         const from = 0;
@@ -132,7 +124,6 @@
         requestAnimationFrame(tick);
     }
 
-    // ── Render Single Results ─────────────────────────────────────
     function renderResults(data) {
         resultsSection.hidden = false;
 
@@ -185,7 +176,6 @@
         });
     }
 
-    // ── Single Button Handler ─────────────────────────────────────
     rankBtn.addEventListener("click", async () => {
         if (!jdFile || !resumeFile) { shakeBtn(rankBtn); return; }
         setLoading(rankBtn, true);
@@ -199,9 +189,6 @@
         }
     });
 
-    // ══════════════════════════════════════════════════════════════
-    //  BULK RANKING MODE
-    // ══════════════════════════════════════════════════════════════
     const bulkJdFileInput = $("#bulk-jd-file");
     const bulkResumeFilesInput = $("#bulk-resume-files");
     const bulkJdDrop = $("#bulk-jd-drop");
@@ -218,7 +205,6 @@
     let bulkJdFile = null;
     let bulkResumeFiles = [];
 
-    // Bulk JD drop zone
     setupSingleDropZone(bulkJdDrop, bulkJdFileInput, (file) => {
         bulkJdFile = file;
         const el = $("#bulk-jd-filename");
@@ -227,7 +213,6 @@
         bulkJdDrop.classList.add("has-file");
     });
 
-    // Bulk Resumes drop zone (multiple)
     setupMultiDropZone(bulkResumeDrop, bulkResumeFilesInput);
 
     function setupSingleDropZone(dropEl, fileInput, onFile) {
@@ -274,7 +259,6 @@
         const valid = files.filter(f => allowed.includes(f.name.split(".").pop().toLowerCase()));
         if (valid.length === 0) { alert("No supported files found."); return; }
 
-        // Merge with existing, deduplicate by name
         const existingNames = new Set(bulkResumeFiles.map(f => f.name));
         valid.forEach(f => { if (!existingNames.has(f.name)) bulkResumeFiles.push(f); });
 
@@ -312,7 +296,6 @@
         }
     }
 
-    // ── API Call (Bulk) ───────────────────────────────────────────
     async function rankMultiple() {
         const formData = new FormData();
         formData.append("jd_file", bulkJdFile);
@@ -329,7 +312,6 @@
         return res.json();
     }
 
-    // ── Render Leaderboard ────────────────────────────────────────
     const MEDALS = ["🥇", "🥈", "🥉"];
 
     function scoreColor(score) {
@@ -373,8 +355,8 @@
                     </div>
                     <div class="lb-section-scores">
                         ${Object.entries(r.section_scores).map(([k, v]) =>
-                            `<span class="section-pill">${k}: <b>${v}%</b></span>`
-                        ).join("")}
+                `<span class="section-pill">${k}: <b>${v}%</b></span>`
+            ).join("")}
                     </div>
                 </div>
                 <div class="lb-score" style="color: ${color}">
@@ -384,7 +366,6 @@
             `;
             leaderboardList.appendChild(card);
 
-            // Animate counter
             const scoreEl = card.querySelector(".lb-score-value");
             animateCounter(scoreEl, r.final_score, "%", 1000 + i * 100);
         });
@@ -392,7 +373,6 @@
         bulkResults.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
-    // ── Bulk Button Handler ───────────────────────────────────────
     bulkRankBtn.addEventListener("click", async () => {
         if (!bulkJdFile || bulkResumeFiles.length === 0) {
             shakeBtn(bulkRankBtn);
@@ -409,7 +389,6 @@
         }
     });
 
-    // ── Shared Utilities ─────────────────────────────────────────
     function setLoading(btn, on) {
         btn.disabled = on;
         btn.querySelector(".btn-text").hidden = on;
