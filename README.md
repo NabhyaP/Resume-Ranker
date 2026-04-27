@@ -29,7 +29,7 @@ Resume Ranker is an AI-powered tool designed to automate the process of matching
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/NabhyaP/Resume-Ranker
    cd Resume_Ranker
    ```
 
