@@ -342,11 +342,13 @@
             const allMissingHtml = (r.missing_skills || []).map(s =>
                 `<span class="skill-chip missing">${s}</span>`).join("") || "<span class='no-items'>None</span>";
 
+            const displayName = r.filename.includes(".") ? r.filename.split(".").slice(0, -1).join(".") : r.filename;
+
             card.innerHTML = `
                 <div class="lb-main-info">
                     <div class="lb-rank">${medal}</div>
                     <div class="lb-info">
-                        <div class="lb-filename">${r.filename}</div>
+                        <div class="lb-filename">${displayName}</div>
                         <div class="lb-skills-row">
                             <div class="lb-skills-group">
                                 <span class="lb-skills-label">✅ Matched:</span>
