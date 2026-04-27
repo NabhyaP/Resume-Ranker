@@ -337,33 +337,68 @@
             const missingHtml = (r.missing_skills || []).slice(0, 5).map(s =>
                 `<span class="skill-chip missing">${s}</span>`).join("") || "<span class='no-items'>None</span>";
 
+            const allMatchedHtml = (r.matched_skills || []).map(s =>
+                `<span class="skill-chip matched">${s}</span>`).join("") || "<span class='no-items'>None</span>";
+            const allMissingHtml = (r.missing_skills || []).map(s =>
+                `<span class="skill-chip missing">${s}</span>`).join("") || "<span class='no-items'>None</span>";
+
             card.innerHTML = `
-                <div class="lb-rank">${medal}</div>
-                <div class="lb-info">
-                    <div class="lb-filename">${r.filename}</div>
-                    <div class="lb-skills-row">
-                        <div class="lb-skills-group">
-                            <span class="lb-skills-label">✅ Matched:</span>
-                            ${matchedHtml}
-                            ${r.matched_skills.length > 5 ? `<span class="skill-chip more">+${r.matched_skills.length - 5}</span>` : ""}
+                <div class="lb-main-info">
+                    <div class="lb-rank">${medal}</div>
+                    <div class="lb-info">
+                        <div class="lb-filename">${r.filename}</div>
+                        <div class="lb-skills-row">
+                            <div class="lb-skills-group">
+                                <span class="lb-skills-label">✅ Matched:</span>
+                                ${matchedHtml}
+                                ${r.matched_skills.length > 5 ? `<span class="skill-chip more">+${r.matched_skills.length - 5}</span>` : ""}
+                            </div>
+                            <div class="lb-skills-group">
+                                <span class="lb-skills-label">❌ Missing:</span>
+                                ${missingHtml}
+                                ${r.missing_skills.length > 5 ? `<span class="skill-chip more">+${r.missing_skills.length - 5}</span>` : ""}
+                            </div>
                         </div>
-                        <div class="lb-skills-group">
-                            <span class="lb-skills-label">❌ Missing:</span>
-                            ${missingHtml}
-                            ${r.missing_skills.length > 5 ? `<span class="skill-chip more">+${r.missing_skills.length - 5}</span>` : ""}
-                        </div>
-                    </div>
-                    <div class="lb-section-scores">
-                        ${Object.entries(r.section_scores).map(([k, v]) =>
+                        <div class="lb-section-scores">
+                            ${Object.entries(r.section_scores).map(([k, v]) =>
                 `<span class="section-pill">${k}: <b>${v}%</b></span>`
             ).join("")}
+                        </div>
+                    </div>
+                    <div class="lb-score" style="color: ${color}">
+                        <span class="lb-score-value" data-target="${r.final_score}">0</span>
+                        <span class="lb-score-label">Match</span>
+                    </div>
+                    <div class="lb-expand-icon">▼</div>
+                </div>
+                <div class="lb-details">
+                    <div class="lb-details-grid">
+                        <div class="lb-details-col">
+                            <h4>✅ All Matched Skills (${r.matched_skills.length})</h4>
+                            <div class="full-skill-list">${allMatchedHtml}</div>
+                        </div>
+                        <div class="lb-details-col">
+                            <h4>❌ All Missing Skills (${r.missing_skills.length})</h4>
+                            <div class="full-skill-list">${allMissingHtml}</div>
+                        </div>
                     </div>
                 </div>
-                <div class="lb-score" style="color: ${color}">
-                    <span class="lb-score-value" data-target="${r.final_score}">0</span>
-                    <span class="lb-score-label">Match</span>
-                </div>
             `;
+            
+            card.addEventListener("click", (e) => {
+                // Don't toggle if clicking on a button or link inside (if any)
+                if (e.target.closest("button, a")) return;
+                
+                const isExpanded = card.classList.contains("is-expanded");
+                
+                // Optional: Collapse others (accordion style)
+                // document.querySelectorAll('.leaderboard-card.is-expanded').forEach(c => {
+                //     if (c !== card) c.classList.remove('is-expanded');
+                // });
+
+                card.classList.toggle("is-expanded");
+            });
+
             leaderboardList.appendChild(card);
 
             const scoreEl = card.querySelector(".lb-score-value");

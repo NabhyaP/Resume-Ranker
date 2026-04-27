@@ -680,17 +680,28 @@ footer {
 
 .leaderboard-card {
     display: flex;
-    align-items: flex-start;
-    gap: 1.25rem;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
     padding: 1.25rem 1.5rem;
     margin-bottom: 1rem;
     animation: fadeUp 0.5s ease-out both;
-    transition: transform var(--transition), box-shadow var(--transition);
+    transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.lb-main-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    width: 100%;
 }
 
 .leaderboard-card:hover {
     transform: translateY(-3px);
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+    border-color: var(--accent);
 }
 
 .leaderboard-card.top-rank {
@@ -796,6 +807,66 @@ footer {
     justify-content: center;
     min-width: 80px;
     text-align: center;
+    margin-left: auto;
+}
+
+.lb-expand-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--text-dim);
+    margin-left: 0.5rem;
+    transition: transform var(--transition);
+    padding-top: 1rem;
+}
+
+.leaderboard-card.is-expanded .lb-expand-icon {
+    transform: rotate(180deg);
+}
+
+.lb-details {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    width: 100%;
+}
+
+.leaderboard-card.is-expanded .lb-details {
+    max-height: 2000px;
+    opacity: 1;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--glass-border);
+}
+
+.lb-details-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+}
+
+.lb-details-col h4 {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-bright);
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.full-skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+@media (max-width: 700px) {
+    .lb-details-grid {
+        grid-template-columns: 1fr;
+    }
 }
 
 .lb-score-value {
