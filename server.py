@@ -38,12 +38,6 @@ class BulkRankResult(BaseModel):
     missing_skills: list
 
 
-@app.post("/api/rank", response_model=RankResponse)
-def rank_resume(req: RankRequest):
-    result = match_resume_to_jd(req.resume_text, req.jd_text)
-    return result
-
-
 @app.post("/api/rank-upload", response_model=RankResponse)
 async def rank_upload(
     resume_file: Optional[UploadFile] = File(None),
