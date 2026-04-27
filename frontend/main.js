@@ -388,12 +388,10 @@
             `;
 
             card.addEventListener("click", (e) => {
-                // Don't toggle if clicking on a button or link inside (if any)
                 if (e.target.closest("button, a")) return;
 
                 const isExpanded = card.classList.contains("is-expanded");
 
-                // Optional: Collapse others (accordion style)
                 document.querySelectorAll('.leaderboard-card.is-expanded').forEach(c => {
                     if (c !== card) c.classList.remove('is-expanded');
                 });
