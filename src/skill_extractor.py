@@ -2,7 +2,12 @@ import spacy
 from sklearn.metrics.pairwise import cosine_similarity
 from src.config import SKILL_MATCH_THRESHOLD
 
-_nlp = spacy.load("en_core_web_sm")
+try:
+    _nlp = spacy.load("en_core_web_sm")
+except OSError:
+    from spacy.cli import download
+    download("en_core_web_sm")
+    _nlp = spacy.load("en_core_web_sm")
 
 def _get_model():
     from src.scoring import _model
